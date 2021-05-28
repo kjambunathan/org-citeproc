@@ -1,9 +1,15 @@
 {-# LANGUAGE DeriveDataTypeable  #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
+import qualified Data.Text                        as T
+import qualified Data.Text.IO                     as TIO
+import           Text.Pandoc                      hiding (Cite (..), readJSON,
+                                                   showJSON, Cite)
+
 import           System.Environment
 import           Text.CSL                         hiding (Citation, Cite (..))
 import           Text.CSL.Pandoc
+
 import           Text.JSON
 import           Text.JSON.Generic
 import           Text.JSON.Types                  (get_field)
@@ -308,7 +314,7 @@ chooseOutputFormat s
   | s == "native" = NativeAfter
   | otherwise = error $ "Unknown output format: " ++ s
 
-chooseRenderer :: OutputFormat -> Pandoc -> String
+-- chooseRenderer :: OutputFormat -> Pandoc -> String
 chooseRenderer fmt =
   case fmt of
     Ascii        -> renderPandocPlain
@@ -320,63 +326,66 @@ chooseRenderer fmt =
 
 -- rendering functions:
 -- plain text:
-renderPandocPlain :: Pandoc -> String
-renderPandocPlain = writePlain opts
-  where
-    opts =
-      def
-        { writerStandalone = False
-        , writerTableOfContents = False
-        , writerCiteMethod = Citeproc
-        , writerWrapText = True -- TODO: don't break lines?
-        , writerColumns = 80 -- TODO: adjustable?
-        , writerExtensions = empty -- TODO: need any exts?
-        }
+-- renderPandocPlain :: Pandoc -> String
+renderPandocPlain = writePlain def
+-- renderPandocPlain = writePlain opts
+--   where
+--     opts =
+--       def
+--         { writerStandalone = False
+--         , writerTableOfContents = False
+--         , writerCiteMethod = Citeproc
+--         , writerWrapText = True -- TODO: don't break lines?
+--         , writerColumns = 80 -- TODO: adjustable?
+--         , writerExtensions = empty -- TODO: need any exts?
+--         }
 
 -- HTML:
-renderPandocHTML :: Pandoc -> String
-renderPandocHTML = writeHtmlString opts
-  where
-    opts =
-      def
-        { writerStandalone = False
-        , writerTableOfContents = False
-        , writerCiteMethod = Citeproc
-        , writerWrapText = False
-        , writerSlideVariant = NoSlides
-        }
+-- renderPandocHTML :: Pandoc -> String
+renderPandocHTML = writeHtml4String def
+-- renderPandocHTML = writeHtmlString opts
+  -- where
+  --   opts =
+  --     def
+  --       { writerStandalone = False
+  --       , writerTableOfContents = False
+  --       , writerCiteMethod = Citeproc
+  --       , writerWrapText = False
+  --       , writerSlideVariant = NoSlides
+  --       }
 
 -- ODT:
-renderPandocODT :: Pandoc -> String
-renderPandocODT (Pandoc _ blocks) = concatMap renderBlock blocks
-  where
-    asDoc inlines = Pandoc nullMeta [Plain inlines]
-    transform i acc =
-      case i of
-        (PDD.Cite _ inls) -> inls ++ acc
-        (Str s) ->
-          if s == citeSep
-            then acc -- remove cite separators inserted earlier
-            else i : acc
-        _ -> i : acc
-    renderInlines inlines =
-      writeOpenDocument opts $ asDoc $ foldr transform [] inlines
-    renderBlock b =
-      case b of
-        (Div ("", ["references"], []) _) ->
-          citeBibSep ++ writeOpenDocument opts (Pandoc nullMeta [b])
-        (Plain inls) ->
-          if inls == [citeBibSepInline]
-            then "" -- remove bib separator inserted earlier
-            else renderInlines inls ++ citeSep
-        _ -> ""
-    opts =
-      def
-        { writerStandalone = False
-        , writerTableOfContents = False
-        , writerCiteMethod = Citeproc
-        , writerWrapText = False
-        }
+-- renderPandocODT :: Pandoc -> String
+renderPandocODT  = writeOpenDocument def
+-- renderPandocODT (Pandoc _ blocks) = concatMap renderBlock blocks
+  -- where
+  --   asDoc inlines = Pandoc nullMeta [Plain inlines]
+  --   transform i acc =
+  --     case i of
+  --       (PDD.Cite _ inls) -> inls ++ acc
+  --       (Str s) ->
+  --         if s == citeSep
+  --           then acc -- remove cite separators inserted earlier
+  --           else i : acc
+  --       _ -> i : acc
+  --   renderInlines inlines =
+  --     writeOpenDocument opts $ asDoc $ foldr transform [] inlines
+  --   renderBlock b =
+  --     case b of
+  --       (Div ("", ["references"], []) _) ->
+  --         citeBibSep ++ writeOpenDocument opts (Pandoc nullMeta [b])
+  --       (Plain inls) ->
+  --         if inls == [citeBibSepInline]
+  --           then "" -- remove bib separator inserted earlier
+  --           else renderInlines inls ++ citeSep
+  --       _ -> ""
+  --   opts =
+  --     def
+  --       { writerStandalone = False
+  --       , writerTableOfContents = False
+  --       , writerCiteMethod = Citeproc
+  --       , writerWrapText = False
+  --       }
 
 -- special case: we can't just use Pandoc's ODT writer directly here,
 -- because it wraps Plain blocks in <text:p> tags.  This breaks our
@@ -386,42 +395,45 @@ renderPandocODT (Pandoc _ blocks) = concatMap renderBlock blocks
 -- document by Org; so here we take care to insert the separators
 -- *outside* the ODT XML tags.
 -- Org:
-renderPandocOrg :: Pandoc -> String
-renderPandocOrg (Pandoc m blocks) = writeOrg opts cleanDoc
-  where
-    opts =
-      def
-        { writerStandalone = False
-        , writerTableOfContents = False
-        , writerCiteMethod = Citeproc
-        , writerSectionDivs = False
-        , writerWrapText = False
-        }
-        -- the Org writer converts divs weirdly, wrapping them in
-        -- BEGIN_HTML/END_HTML blocks...avoid this by extracting the
-        -- list of bibliography blocks from a Div block
-    cleanDoc = Pandoc m (foldr unwrapRefsBlock [] blocks)
-    headline = Plain [Str "* References\n"]
-    unwrapRefsBlock b acc =
-      case b of
-        (Div ("", ["references"], []) blks) -> (headline : blks) ++ acc
-        _                                   -> b : acc
+-- renderPandocOrg :: Pandoc -> String
+renderPandocOrg  = writeOrg def
+-- renderPandocOrg (Pandoc m blocks) = writeOrg opts cleanDoc
+--   where
+--     opts =
+--       def
+--         { writerStandalone = False
+--         , writerTableOfContents = False
+--         , writerCiteMethod = Citeproc
+--         , writerSectionDivs = False
+--         , writerWrapText = False
+--         }
+--         -- the Org writer converts divs weirdly, wrapping them in
+--         -- BEGIN_HTML/END_HTML blocks...avoid this by extracting the
+--         -- list of bibliography blocks from a Div block
+--     cleanDoc = Pandoc m (foldr unwrapRefsBlock [] blocks)
+--     headline = Plain [Str "* References\n"]
+--     unwrapRefsBlock b acc =
+--       case b of
+--         (Div ("", ["references"], []) blks) -> (headline : blks) ++ acc
+--         _                                   -> b : acc
 
 -- Native:
-renderPandocNativeBefore :: Pandoc -> String
-renderPandocNativeBefore = writeNative opts
-  where
-    opts = def {writerStandalone = False}
+-- renderPandocNativeBefore :: Pandoc -> String
+renderPandocNativeBefore = writeNative def
+-- renderPandocNativeBefore = writeNative opts
+--   where
+--     opts = def {writerStandalone = False}
 
-renderPandocNative :: Pandoc -> String
-renderPandocNative = writeNative opts
-  where
-    opts =
-      def
-        { writerStandalone = False
-        , writerTableOfContents = False
-        , writerCiteMethod = Citeproc
-        }
+-- renderPandocNative :: Pandoc -> String
+renderPandocNative = writeNative def
+-- renderPandocNative = writeNative opts
+--   where
+--     opts =
+--       def
+--         { writerStandalone = False
+--         , writerTableOfContents = False
+--         , writerCiteMethod = Citeproc
+--         }
 
 --
 -- MAIN
@@ -453,7 +465,7 @@ main = do
                        Nothing              ->  "html"
 
   bibfiles <- case args of
-                   (x:_) -> mapM readBiblioFile args
+                   (x:_) -> mapM (readBiblioFile (\x->True)) args
                    _     -> err "No Bibfiles specified"
 
   jsonfile <- case optReferences opt of
@@ -466,8 +478,23 @@ main = do
 
   let refs = concat bibfiles
   let Ok (CitationsData inputCitations) = decode jsonfile
+  -- let doc = processCites sty refs $ citationsAsPandoc inputCitations
+  -- putStrLn $ (chooseRenderer . chooseOutputFormat) backend doc
+
   let doc = processCites sty refs $ citationsAsPandoc inputCitations
-  putStrLn $ (chooseRenderer . chooseOutputFormat) backend doc
+      -- doc1 = showDoc doc
+
+  result <-
+    runIO $ do
+      -- writeOpenDocument def doc
+      -- renderPandocODT doc
+      -- (chooseRenderer $ chooseOutputFormat backend) (nullifyDivAttr (removeCiteSep doc))
+      (chooseRenderer $ chooseOutputFormat backend) doc
+
+  odt <- handleError result
+
+  TIO.putStrLn odt
+  -- TIO.writeFile outputfile odt
 
 data Opt =
   Opt{ optStyle      :: Maybe String
