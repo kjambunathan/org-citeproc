@@ -447,7 +447,7 @@ main = do
                        Just "html"          ->  "html"
                        Just "odt"           ->  "odt"
                        Just "native-before" ->  "native-before"
-                       Just "native-after"  ->  "native-after"
+                       Just "native"        ->  "native"
                        Just "org"           ->  "org"
                        Just _               -> "html"
                        Nothing              ->  "html"
