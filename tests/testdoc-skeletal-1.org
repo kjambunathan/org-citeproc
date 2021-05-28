@@ -1,0 +1,115 @@
+#+OPTIONS: ':nil *:t -:t ::t <:t H:3 \n:nil ^:t arch:nil author:t
+#+OPTIONS: c:nil creator:comment d:(not "LOGBOOK") date:t e:t
+#+OPTIONS: email:nil f:t inline:t num:t p:nil pri:nil prop:nil stat:t
+#+OPTIONS: tags:t tasks:t tex:t timestamp:t title:t toc:t todo:t |:t
+#+TITLE: Org-Citeproc tests
+#+DESCRIPTION: 
+#+KEYWORDS:
+#+LANGUAGE: en
+#+SELECT_TAGS: export
+#+EXCLUDE_TAGS: noexport
+#+CREATOR: Emacs 23.4.1 (Org mode 8.3beta)
+#+CSL_FILE: chicago-author-date.csl
+#+BIBDB: bibtex testdoc.bib
+
+* Org markup
+
+** Simple citations
+
+*** Parenthetical 
+
+[@Brandom1994]
+
+# [@Hofweber2007]
+
+# [@Russell1919]
+
+# [@Rogers1996]
+
+# [@RogersKepser2007]
+
+# [@Caponigro2003]
+
+# [@Ross1985]
+
+# [@Faraci1970]
+
+*** In-text 
+
+@Brandom1994
+
+# @Hofweber2007
+
+# @Russell1919
+
+# @Rogers1996
+
+# @RogersKepser2007
+
+# @Caponigro2003
+
+# @Ross1985
+
+# @Faraci1970
+
+*** With prefix and suffix data
+
+[(cite): see @Brandom1994 chapter 7]
+
+# [(cite): @Hofweber2007 section 1]
+
+# [cite: @Russell1919 cf. section 3]
+
+# [(cite): e.g., @Rogers1996]
+
+[cite: see @Caponigro2003 chapter 1]
+
+# [cite: e.g., @Ross1985]
+
+*** Citations to works with tricky field data
+
+@BelnapSteel1976
+
+@Vaanaanen2011
+
+@denDikkenMeinungerWilder2000
+
+[@Belnap1970]
+
+** Multi-cite citations
+
+*** Parenthetical, keys only
+
+[(cite): @Brandom1994; @Hofweber2007; @Russell1919]
+
+# [(cite): @Rogers1996; @RogersKepser2007; @Caponigro2003]
+
+# [(cite): @Ross1985; @Faraci1970]
+
+*** Parenthetical, with prefix and suffix data for individual works
+
+[(cite): see @Brandom1994 chapter 7; also @Hofweber2007; @Russell1919 is the locus classicus]
+
+[(cite): @Rogers1996; for an overview, see @RogersKepser2007 and references therein]
+
+*** Parenthetical, with common prefix and suffix data
+
+[(cite): For more on this topic, see ; @Brandom1994; @Hofweber2007; @Russell1919; and references therein]
+
+*** All in-text, keys only
+
+[cite: @Brandom1994; @Hofweber2007; @Russell1919]
+
+# [cite: @Rogers1996; @RogersKepser2007; @Caponigro2003]
+
+# [cite: @Ross1985; @Faraci1970]
+
+*** All in-text, with common prefix and suffix
+
+[cite: See: ; @Brandom1994; @Hofweber2007; @Russell1919; and references therein.]
+
+[cite: For more on this topic, see ; @Rogers1996; @RogersKepser2007; @Caponigro2003]
+
+* References
+
+#+BIBLIOGRAPHY: here
