@@ -17,10 +17,11 @@ import           Text.Pandoc.Writers.OpenDocument
 import           Text.Pandoc.Writers.Org
 
 import           Control.Applicative              ((<$>))
-import           Control.Monad                    (unless)
+import           Control.Monad                    (foldM, unless, when)
 import           Data.List                        (intersperse)
 --import Text.Pandoc.Generic
 import           Data.Set                         (empty)
+import           System.Console.GetOpt
 import           System.Exit
 import           System.IO
 
@@ -295,6 +296,7 @@ data OutputFormat
   | Org
   | NativeBefore
   | NativeAfter
+  deriving (Show, Ord, Eq)
 
 chooseOutputFormat :: String -> OutputFormat
 chooseOutputFormat s
@@ -426,19 +428,84 @@ renderPandocNative = writeNative opts
 --
 main :: IO ()
 main = do
-  args <- getArgs
-  progname <- getProgName
-  unless (length args >= 3) $ do
-    hPutStrLn stderr $
-      "Usage:  " ++ progname ++ " OUTPUT-FORMAT CSLFILE BIBFILE.."
-    exitWith (ExitFailure 1)
-  let (backend:cslfile:bibfiles) = args
-  sty <- readCSLFile Nothing cslfile
-  refs <- concat <$> mapM readBiblioFile bibfiles
-  res <- decode <$> getContents
-  -- hPutStrLn stderr $ show res
-  let Ok (CitationsData inputCitations) = res
-  -- for debugging:
-  --hPutStrLn stderr $ show inputCitations
+  rawargs <- getArgs
+  let (opts, args, errs) = getOpt Permute options rawargs
+  unless (null errs) $ do
+    mapM_ err errs
+    exitWith $ ExitFailure 1
+  opt <- foldM (flip ($)) defaultOpt opts
+
+  when (optHelp opt) $ do
+    putStr $ usageInfo "org-citeproc [OPTIONS] [BIB-FILES]" options
+    exitSuccess
+  when (optVersion opt) $ do
+    putStrLn $ "citeproc version " ++ "0.1"
+    exitSuccess
+
+  let backend = id $ case optFormat opt of
+                       Just "ascii"         ->  "ascii"
+                       Just "html"          ->  "html"
+                       Just "odt"           ->  "odt"
+                       Just "native-before" ->  "native-before"
+                       Just "native-after"  ->  "native-after"
+                       Just "org"           ->  "org"
+                       Just _               -> "html"
+                       Nothing              ->  "html"
+
+  bibfiles <- case args of
+                   (x:_) -> mapM readBiblioFile args
+                   _     -> err "No Bibfiles specified"
+
+  jsonfile <- case optReferences opt of
+                  Just fp ->  readFile fp
+                  Nothing ->  err "No references"
+
+  sty <- case optStyle opt of
+                  Just fp -> readCSLFile Nothing fp
+                  Nothing -> err "No style specified"
+
+  let refs = concat bibfiles
+  let Ok (CitationsData inputCitations) = decode jsonfile
   let doc = processCites sty refs $ citationsAsPandoc inputCitations
   putStrLn $ (chooseRenderer . chooseOutputFormat) backend doc
+
+data Opt =
+  Opt{ optStyle      :: Maybe String
+     , optReferences :: Maybe String
+     , optFormat     :: Maybe String
+     , optHelp       :: Bool
+     , optVersion    :: Bool
+     } deriving Show
+
+defaultOpt :: Opt
+defaultOpt =
+  Opt { optStyle = Nothing
+      , optReferences = Nothing
+      , optFormat = Nothing
+      , optHelp = False
+      , optVersion = False
+      }
+
+options :: [OptDescr (Opt -> IO Opt)]
+options =
+  [ Option ['s'] ["style"]
+     (ReqArg (\fp opt -> return opt{ optStyle = Just fp }) "FILE")
+     "CSL style file"
+  , Option ['c'] ["citations"]
+     (ReqArg (\fp opt -> return opt{ optReferences = Just fp }) "FILE")
+     "Citations as JSON"
+  , Option ['f'] ["format"]
+     (ReqArg (\format opt -> return opt{ optFormat = Just format }) "ascii|html|native|native-before|odt|org")
+     "Output format"
+  , Option ['h'] ["help"]
+     (NoArg (\opt -> return opt{ optHelp = True }))
+     "Print usage information"
+  , Option ['V'] ["version"]
+     (NoArg (\opt -> return opt{ optVersion = True }))
+     "Print version number"
+  ]
+
+err :: String -> IO a
+err s = do
+  hPutStrLn stderr s
+  exitWith $ ExitFailure 1
