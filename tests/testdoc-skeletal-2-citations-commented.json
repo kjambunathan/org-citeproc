@@ -1,0 +1,181 @@
+[
+  {
+    "citationItems": [
+      {
+        "id": "Brandom1994"
+      }
+    ]
+  },
+  {
+    "citationItems": [
+      {
+        "id": "Brandom1994",
+        "author-in-text": true
+      }
+    ]
+  },
+  {
+    "citationItems": [
+      {
+        "id": "Brandom1994",
+        "suffix": " chapter 7",
+        "prefix": "see "
+      }
+    ]
+  },
+  {
+    "citationItems": [
+      {
+        "id": "Caponigro2003",
+        "author-in-text": true,
+        "suffix": " chapter 1",
+        "prefix": "see "
+      }
+    ]
+  },
+  {
+    "citationItems": [
+      {
+        "id": "BelnapSteel1976",
+        "author-in-text": true
+      }
+    ]
+  },
+  {
+    "citationItems": [
+      {
+        "id": "Vaanaanen2011",
+        "author-in-text": true
+      }
+    ]
+  },
+  {
+    "citationItems": [
+      {
+        "id": "denDikkenMeinungerWilder2000",
+        "author-in-text": true
+      }
+    ]
+  },
+  {
+    "citationItems": [
+      {
+        "id": "Belnap1970"
+      }
+    ]
+  },
+  {
+    "citationItems": [
+      {
+        "id": "Brandom1994"
+      },
+      {
+        "id": "Hofweber2007"
+      },
+      {
+        "id": "Russell1919"
+      }
+    ]
+  },
+  {
+    "citationItems": [
+      {
+        "id": "Brandom1994",
+        "suffix": " chapter 7",
+        "prefix": "see "
+      },
+      {
+        "id": "Hofweber2007",
+        "prefix": "also "
+      },
+      {
+        "id": "Russell1919",
+        "suffix": " is the locus classicus"
+      }
+    ]
+  },
+  {
+    "citationItems": [
+      {
+        "id": "Rogers1996"
+      },
+      {
+        "id": "RogersKepser2007",
+        "suffix": " and references therein",
+        "prefix": "for an overview, see "
+      }
+    ]
+  },
+  {
+    "citationItems": [
+      {
+        "id": "Brandom1994"
+      },
+      {
+        "id": "Hofweber2007"
+      },
+      {
+        "id": "Russell1919"
+      }
+    ],
+    "properties": {
+      "common-prefix": "For more on this topic, see",
+      "common-suffix": "and references therein"
+    }
+  },
+  {
+    "citationItems": [
+      {
+        "id": "Brandom1994",
+        "author-in-text": true
+      },
+      {
+        "id": "Hofweber2007",
+        "author-in-text": true
+      },
+      {
+        "id": "Russell1919",
+        "author-in-text": true
+      }
+    ]
+  },
+  {
+    "citationItems": [
+      {
+        "id": "Brandom1994",
+        "author-in-text": true
+      },
+      {
+        "id": "Hofweber2007",
+        "author-in-text": true
+      },
+      {
+        "id": "Russell1919",
+        "author-in-text": true
+      }
+    ],
+    "properties": {
+      "common-prefix": "See:",
+      "common-suffix": "and references therein."
+    }
+  },
+  {
+    "citationItems": [
+      {
+        "id": "Rogers1996",
+        "author-in-text": true
+      },
+      {
+        "id": "RogersKepser2007",
+        "author-in-text": true
+      },
+      {
+        "id": "Caponigro2003",
+        "author-in-text": true
+      }
+    ],
+    "properties": {
+      "common-prefix": "For more on this topic, see"
+    }
+  }
+]
