@@ -1,181 +1,226 @@
 [
-  {
-    "citationItems": [
-      {
-        "id": "Brandom1994"
-      }
-    ]
-  },
-  {
-    "citationItems": [
-      {
-        "id": "Brandom1994",
-        "author-in-text": true
-      }
-    ]
-  },
-  {
-    "citationItems": [
-      {
-        "id": "Brandom1994",
-        "suffix": " chapter 7",
-        "prefix": "see "
-      }
-    ]
-  },
-  {
-    "citationItems": [
-      {
-        "id": "Caponigro2003",
-        "author-in-text": true,
-        "suffix": " chapter 1",
-        "prefix": "see "
-      }
-    ]
-  },
-  {
-    "citationItems": [
-      {
-        "id": "BelnapSteel1976",
-        "author-in-text": true
-      }
-    ]
-  },
-  {
-    "citationItems": [
-      {
-        "id": "Vaanaanen2011",
-        "author-in-text": true
-      }
-    ]
-  },
-  {
-    "citationItems": [
-      {
-        "id": "denDikkenMeinungerWilder2000",
-        "author-in-text": true
-      }
-    ]
-  },
-  {
-    "citationItems": [
-      {
-        "id": "Belnap1970"
-      }
-    ]
-  },
-  {
-    "citationItems": [
-      {
-        "id": "Brandom1994"
-      },
-      {
-        "id": "Hofweber2007"
-      },
-      {
-        "id": "Russell1919"
-      }
-    ]
-  },
-  {
-    "citationItems": [
-      {
-        "id": "Brandom1994",
-        "suffix": " chapter 7",
-        "prefix": "see "
-      },
-      {
-        "id": "Hofweber2007",
-        "prefix": "also "
-      },
-      {
-        "id": "Russell1919",
-        "suffix": " is the locus classicus"
-      }
-    ]
-  },
-  {
-    "citationItems": [
-      {
-        "id": "Rogers1996"
-      },
-      {
-        "id": "RogersKepser2007",
-        "suffix": " and references therein",
-        "prefix": "for an overview, see "
-      }
-    ]
-  },
-  {
-    "citationItems": [
-      {
-        "id": "Brandom1994"
-      },
-      {
-        "id": "Hofweber2007"
-      },
-      {
-        "id": "Russell1919"
-      }
-    ],
-    "properties": {
-      "common-prefix": "For more on this topic, see",
-      "common-suffix": "and references therein"
+    // Simple: parenthetical
+    // [@Brandom1994]
+    // (Brandom 1994)
+    {
+	"citationItems": [
+	    {
+		"id": "Brandom1994"
+	    }
+	]
+    },
+    // Simple: in-text
+    // @Brandom1994
+    // Brandom (1994)
+    {
+	"citationItems": [
+	    {
+		"id": "Brandom1994",
+		"author-in-text": true
+	    }
+	]
+    },
+    // Simple: with prefix and suffix
+    // [(cite): see @Brandom1994 chapter 7]
+    // (see Brandom 1994 chapter 7)
+    {
+	"citationItems": [
+	    {
+		"id": "Brandom1994",
+		"suffix": " chapter 7",
+		"prefix": "see "
+	    }
+	]
+    },
+    // Simple: with prefix and suffix
+    // [cite: see @Caponigro2003 chapter 1]
+    // Caponigro (see 2003 chapter 1)
+    {
+	"citationItems": [
+	    {
+		"id": "Caponigro2003",
+		"author-in-text": true,
+		"suffix": " chapter 1",
+		"prefix": "see "
+	    }
+	]
+    },
+    // Simple: tricky fields
+    // @BelnapSteel1976
+    // N. D. Belnap Jr. and Steel (1976)
+    {
+	"citationItems": [
+	    {
+		"id": "BelnapSteel1976",
+		"author-in-text": true
+	    }
+	]
+    },
+    // Simple: tricky fields
+    // @Vaanaanen2011
+    // Väänäänen (2011)
+    {
+	"citationItems": [
+	    {
+		"id": "Vaanaanen2011",
+		"author-in-text": true
+	    }
+	]
+    },
+    // Simple: tricky fields
+    // @denDikkenMeinungerWilder2000
+    // den Dikken, Meinunger, and Wilder (2000)
+    {
+	"citationItems": [
+	    {
+		"id": "denDikkenMeinungerWilder2000",
+		"author-in-text": true
+	    }
+	]
+    },
+    // Simple: tricky
+    // [@Belnap1970]
+    // (N. Belnap 1970)
+    {
+	"citationItems": [
+	    {
+		"id": "Belnap1970"
+	    }
+	]
+    },
+    // Multicite: parenthetical, keys only
+    // [(cite): @Brandom1994; @Hofweber2007; @Russell1919]
+    // (Brandom 1994; Hofweber 2007; Russell 2001)
+    {
+	"citationItems": [
+	    {
+		"id": "Brandom1994"
+	    },
+	    {
+		"id": "Hofweber2007"
+	    },
+	    {
+		"id": "Russell1919"
+	    }
+	]
+    },
+    // Multicite: parenthetical, with prefix and suffix for individual works
+    // [(cite): see @Brandom1994 chapter 7; also @Hofweber2007; @Russell1919 is the locus classicus]						     // (see Brandom 1994 chapter 7; also Hofweber 2007; Russell 2001 is the locus classicus)
+    {
+	"citationItems": [
+	    {
+		"id": "Brandom1994",
+		"suffix": " chapter 7",
+		"prefix": "see "
+	    },
+	    {
+		"id": "Hofweber2007",
+		"prefix": "also "
+	    },
+	    {
+		"id": "Russell1919",
+		"suffix": " is the locus classicus"
+	    }
+	]
+    },
+    // Multicite: Parenthetical with prefix and suffix for individual works
+    // [(cite): @Rogers1996; for an overview, see @RogersKepser2007 and references therein]
+    // (Rogers 1996; for an overview, see Rogers and Kepser 2007 and references therein)
+    {
+	"citationItems": [
+	    {
+		"id": "Rogers1996"
+	    },
+	    {
+		"id": "RogersKepser2007",
+		"suffix": " and references therein",
+		"prefix": "for an overview, see "
+	    }
+	]
+    },
+    // Multicite: Parentheticla with common prefix and suffix
+    // [(cite): For more on this topic, see ; @Brandom1994; @Hofweber2007; @Russell1919; and references therein]
+    // (For more on this topic, see Brandom 1994; Hofweber 2007; Russell 2001, and references therein)
+    {
+	"citationItems": [
+	    {
+		"id": "Brandom1994"
+	    },
+	    {
+		"id": "Hofweber2007"
+	    },
+	    {
+		"id": "Russell1919"
+	    }
+	],
+	"properties": {
+	    "common-prefix": "For more on this topic, see",
+	    "common-suffix": "and references therein"
+	}
+    },
+    // Multicite: all in-text, keys only
+    // [cite: @Brandom1994; @Hofweber2007; @Russell1919]
+    // Brandom (1994), Hofweber (2007), Russell (2001)
+    {
+	"citationItems": [
+	    {
+		"id": "Brandom1994",
+		"author-in-text": true
+	    },
+	    {
+		"id": "Hofweber2007",
+		"author-in-text": true
+	    },
+	    {
+		"id": "Russell1919",
+		"author-in-text": true
+	    }
+	]
+    },
+    // Multicite: all in-text with common prefix and suffix
+    // [cite: See: ; @Brandom1994; @Hofweber2007; @Russell1919; and references therein.]
+    
+    // See: Brandom (1994), Hofweber (2007), Russell (2001), and references therein.
+    {
+	"citationItems": [
+	    {
+		"id": "Brandom1994",
+		"author-in-text": true
+	    },
+	    {
+		"id": "Hofweber2007",
+		"author-in-text": true
+	    },
+	    {
+		"id": "Russell1919",
+		"author-in-text": true
+	    }
+	],
+	"properties": {
+	    "common-prefix": "See:",
+	    "common-suffix": "and references therein."
+	}
+    },
+    // Multicite: all in-text with common prefix and suffix
+    // [cite: For more on this topic, see ; @Rogers1996; @RogersKepser2007; @Caponigro2003]
+    // For more on this topic, see Rogers (1996), Rogers and Kepser (2007), Caponigro (2003)
+    {
+	"citationItems": [
+	    {
+		"id": "Rogers1996",
+		"author-in-text": true
+	    },
+	    {
+		"id": "RogersKepser2007",
+		"author-in-text": true
+	    },
+	    {
+		"id": "Caponigro2003",
+		"author-in-text": true
+	    }
+	],
+	"properties": {
+	    "common-prefix": "For more on this topic, see"
+	}
     }
-  },
-  {
-    "citationItems": [
-      {
-        "id": "Brandom1994",
-        "author-in-text": true
-      },
-      {
-        "id": "Hofweber2007",
-        "author-in-text": true
-      },
-      {
-        "id": "Russell1919",
-        "author-in-text": true
-      }
-    ]
-  },
-  {
-    "citationItems": [
-      {
-        "id": "Brandom1994",
-        "author-in-text": true
-      },
-      {
-        "id": "Hofweber2007",
-        "author-in-text": true
-      },
-      {
-        "id": "Russell1919",
-        "author-in-text": true
-      }
-    ],
-    "properties": {
-      "common-prefix": "See:",
-      "common-suffix": "and references therein."
-    }
-  },
-  {
-    "citationItems": [
-      {
-        "id": "Rogers1996",
-        "author-in-text": true
-      },
-      {
-        "id": "RogersKepser2007",
-        "author-in-text": true
-      },
-      {
-        "id": "Caponigro2003",
-        "author-in-text": true
-      }
-    ],
-    "properties": {
-      "common-prefix": "For more on this topic, see"
-    }
-  }
 ]
