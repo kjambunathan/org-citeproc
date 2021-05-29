@@ -2,7 +2,7 @@
 
 # cat testdoc-skeletal-2-citations.json | org-citeproc org chicago-author-date.csl testdoc.bib > testdoc-skeletal-2-output.org
 # cat testdoc-skeletal-2-citations.json | org-citeproc html chicago-author-date.csl testdoc.bib > testdoc-skeletal-2-output.html
-# cat testdoc-skeletal-2-citations.json | org-citeproc odt chicago-author-date.csl testdoc.bib > testdoc-skeletal-2-output.odt
+# cat testdoc-skeletal-2-citations.json | org-citeproc odt chicago-author-date.csl testdoc.bib > testdoc-skeletal-2-output.xml
 # cat testdoc-skeletal-2-citations.json | org-citeproc native-before chicago-author-date.csl testdoc.bib > testdoc-skeletal-2-output-native-before.hs
 # cat testdoc-skeletal-2-citations.json | org-citeproc native chicago-author-date.csl testdoc.bib > testdoc-skeletal-2-output-native.hs
 # cat testdoc-skeletal-2-citations.json | org-citeproc ascii chicago-author-date.csl testdoc.bib > testdoc-skeletal-2-output.txt
@@ -19,7 +19,7 @@
 
 stack exec org-citeproc -- -f org           -s chicago-author-date.csl -c testdoc-skeletal-2-citations.json testdoc.bib > testdoc-skeletal-2-output.org              
 stack exec org-citeproc -- -f html          -s chicago-author-date.csl -c testdoc-skeletal-2-citations.json testdoc.bib > testdoc-skeletal-2-output.html             
-stack exec org-citeproc -- -f odt           -s chicago-author-date.csl -c testdoc-skeletal-2-citations.json testdoc.bib > testdoc-skeletal-2-output.odt              
+stack exec org-citeproc -- -f odt           -s chicago-author-date.csl -c testdoc-skeletal-2-citations.json testdoc.bib > testdoc-skeletal-2-output.xml              
 stack exec org-citeproc -- -f native-before -s chicago-author-date.csl -c testdoc-skeletal-2-citations.json testdoc.bib > testdoc-skeletal-2-output-native-before.hs 
 stack exec org-citeproc -- -f native        -s chicago-author-date.csl -c testdoc-skeletal-2-citations.json testdoc.bib > testdoc-skeletal-2-output-native.hs        
 stack exec org-citeproc -- -f ascii         -s chicago-author-date.csl -c testdoc-skeletal-2-citations.json testdoc.bib > testdoc-skeletal-2-output.txt              
