@@ -177,21 +177,21 @@ instance JSON Cite where
       _ -> Error "Not a citation item"
   readJSON x = fromJSON x
 
--- global values needed by several functions
-citeSep :: String
-citeSep = "////\n" -- TODO: prefer something like "<!-- endCite -->"?
+-- -- global values needed by several functions
+-- citeSep :: String
+-- citeSep = "////\n" -- TODO: prefer something like "<!-- endCite -->"?
 
-citeSepInline :: Inline
-citeSepInline = Str citeSep
+-- citeSepInline :: Inline
+-- citeSepInline = Str citeSep
 
-citeBibSep :: String
-citeBibSep = "====\n" -- TODO: prefer something like "<!-- startBibliography -->"?
+-- citeBibSep :: String
+-- citeBibSep = "====\n" -- TODO: prefer something like "<!-- startBibliography -->"?
 
-citeBibSepInline :: Inline
-citeBibSepInline = Str citeBibSep
+-- citeBibSepInline :: Inline
+-- citeBibSepInline = Str citeBibSep
 
-citeBibSepBlock :: Block
-citeBibSepBlock = Plain [citeBibSepInline]
+-- citeBibSepBlock :: Block
+-- citeBibSepBlock = Plain [citeBibSepInline]
 
 -- functions to transform input into a Pandoc
 itemAsCitation :: Cite -> Citation
@@ -272,7 +272,7 @@ multiCite (ParenMulti cd) = [toPandocCite newCd]
 citationsAsPandoc :: [CitationData] -> Pandoc
 citationsAsPandoc cds = Pandoc nullMeta citationBlocks
   where
-    citationBlocks = foldr getBlocks [citeBibSepBlock] cds
+    citationBlocks = foldr getBlocks [] cds
         -- a citation is a `multi-cite' and needs to be handled
         -- specially when it has a common prefix or suffix, or when it
         -- contains only in-text references (and there are 2+).  In
@@ -283,10 +283,10 @@ citationsAsPandoc cds = Pandoc nullMeta citationBlocks
     hasCommons cd = not $ null $ getCPrefix cd ++ getCSuffix cd
     getBlocks cd acc
       | multiInText cd =
-        (Plain $ multiCite (InTextMulti cd) ++ [citeSepInline]) : acc
+        (Plain $ multiCite (InTextMulti cd)) : acc
       | hasCommons cd =
-        (Plain $ multiCite (ParenMulti cd) ++ [citeSepInline]) : acc
-      | otherwise = Plain [toPandocCite cd, citeSepInline] : acc
+        (Plain $ multiCite (ParenMulti cd)) : acc
+      | otherwise = Plain [toPandocCite cd] : acc
 
 --
 -- OUTPUT PROCESSING
@@ -296,7 +296,7 @@ chooseRendererNew backend =
   case backend of
     "ascii"         -> writePlain def
     "html"          -> (writeHtml4String def) . nullifyDivAttr
-    "odt"           -> (writeOpenDocument def) . removeCiteSep
+    "odt"           -> (writeOpenDocument def)
     "org"           -> (writeOrg def) . nullifyDivAttr
     "native-before" -> writeNative def
     "native"        -> writeNative def
@@ -308,17 +308,17 @@ chooseRendererNew backend =
         doNullifyDivAttr :: Block -> Block
         doNullifyDivAttr (Div _ bs) = Div nullAttr bs
         doNullifyDivAttr x          = x
-    removeCiteSep :: Pandoc -> Pandoc
-    removeCiteSep doc = walk doRemoveCiteSep doc
-      where
-        doRemoveCiteSep :: Inline -> Inline
-        doRemoveCiteSep x =
-          case x of
-            (Str s) ->
-              if s == citeSep || s == citeBibSep
-                then (Str "")
-                else x
-            _ -> x
+    -- removeCiteSep :: Pandoc -> Pandoc
+    -- removeCiteSep doc = walk doRemoveCiteSep doc
+    --   where
+    --     doRemoveCiteSep :: Inline -> Inline
+    --     doRemoveCiteSep x =
+    --       case x of
+    --         (Str s) ->
+    --           if s == citeSep || s == citeBibSep
+    --             then (Str "")
+    --             else x
+    --         _ -> x
 
 --
 -- MAIN
@@ -383,8 +383,8 @@ main = do
         bb <- g bibentries
         let (citationsSep, bibEntrySep, sectionSep) =
               case backend of
-                "odt"     -> ("\n\n", "\n\n", "\n\f\n")
-                otherwise -> ("////\n", "\n\n", "----------------")
+                "odt"     -> ("\n\n"  , "\n\n", "\n\f\n")
+                otherwise -> ("////\n",     "", "====\n")
             h sep = (T.intercalate (T.pack sep))
             zz =
               (h citationsSep aa) <> (T.pack sectionSep) <> (h bibEntrySep bb)
