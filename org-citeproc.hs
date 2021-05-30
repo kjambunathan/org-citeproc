@@ -177,22 +177,6 @@ instance JSON Cite where
       _ -> Error "Not a citation item"
   readJSON x = fromJSON x
 
--- -- global values needed by several functions
--- citeSep :: String
--- citeSep = "////\n" -- TODO: prefer something like "<!-- endCite -->"?
-
--- citeSepInline :: Inline
--- citeSepInline = Str citeSep
-
--- citeBibSep :: String
--- citeBibSep = "====\n" -- TODO: prefer something like "<!-- startBibliography -->"?
-
--- citeBibSepInline :: Inline
--- citeBibSepInline = Str citeBibSep
-
--- citeBibSepBlock :: Block
--- citeBibSepBlock = Plain [citeBibSepInline]
-
 -- functions to transform input into a Pandoc
 itemAsCitation :: Cite -> Citation
 itemAsCitation i =
@@ -308,17 +292,6 @@ chooseRendererNew backend =
         doNullifyDivAttr :: Block -> Block
         doNullifyDivAttr (Div _ bs) = Div nullAttr bs
         doNullifyDivAttr x          = x
-    -- removeCiteSep :: Pandoc -> Pandoc
-    -- removeCiteSep doc = walk doRemoveCiteSep doc
-    --   where
-    --     doRemoveCiteSep :: Inline -> Inline
-    --     doRemoveCiteSep x =
-    --       case x of
-    --         (Str s) ->
-    --           if s == citeSep || s == citeBibSep
-    --             then (Str "")
-    --             else x
-    --         _ -> x
 
 --
 -- MAIN
