@@ -23,3 +23,6 @@ stack exec org-citeproc -- -f odt           -s chicago-author-date.csl -c testdo
 stack exec org-citeproc -- -f native-before -s chicago-author-date.csl -c testdoc-skeletal-2-citations.json testdoc.bib > testdoc-skeletal-2-output-native-before.hs 
 stack exec org-citeproc -- -f native        -s chicago-author-date.csl -c testdoc-skeletal-2-citations.json testdoc.bib > testdoc-skeletal-2-output-native.hs        
 stack exec org-citeproc -- -f ascii         -s chicago-author-date.csl -c testdoc-skeletal-2-citations.json testdoc.bib > testdoc-skeletal-2-output.txt              
+
+# Use this for setting args in ghci
+# :set args -f odt -s tests/chicago-author-date.csl -c tests/testdoc-skeletal-2-citations.json tests/testdoc.bib
