@@ -25,8 +25,11 @@ import           System.IO
 import qualified Data.Text              as T
 import qualified Data.Text.IO           as TIO
 
--- https://hackage.haskell.org/package/pandoc-types-1.22/docs/Text-Pandoc-Walk.html
 import           Text.Pandoc.Walk
+
+-- Text.Pandoc.Definition :: https://hackage.haskell.org/package/pandoc-types-1.22/docs/Text-Pandoc-Definition.html
+-- Text.Pandoc.Walk :: https://hackage.haskell.org/package/pandoc-types-1.22/docs/Text-Pandoc-Walk.html
+-- Text.Pandoc.Writers :: https://hackage.haskell.org/package/pandoc-2.14/docs/Text-Pandoc-Writers.html
 
 --
 -- INPUT PROCESSING
@@ -278,14 +281,16 @@ citationsAsPandoc cds = Pandoc nullMeta citationBlocks
 -- rendering functions:
 chooseRendererNew backend =
   case backend of
-    "ascii"         -> writePlain def
-    "html"          -> (writeHtml4String def) . nullifyDivAttr
-    "odt"           -> (writeOpenDocument def)
-    "org"           -> (writeOrg def) . nullifyDivAttr
-    "native-before" -> writeNative def
-    "native"        -> writeNative def
+    "ascii"         -> writePlain opts
+    "html"          -> (writeHtml4String opts)
+    "odt"           -> (writeOpenDocument opts)
+    "org"           -> (writeOrg opts) . nullifyDivAttr
+    "native-before" -> writeNative opts
+    "native"        -> writeNative opts
     otherwise       -> error $ "Unknown output format: " ++ backend
   where
+    -- https://hackage.haskell.org/package/pandoc-2.14/docs/Text-Pandoc-Options.html#t:WriterOptions
+    opts = def { writerWrapText = WrapNone, writerCiteMethod  = Citeproc }
     nullifyDivAttr :: Pandoc -> Pandoc
     nullifyDivAttr = walk doNullifyDivAttr
       where
@@ -352,15 +357,17 @@ main = do
                      otherwise -> False)
                 ds
             [Div _ bibentries] = bibliography
-        aa <- g citations
-        bb <- g bibentries
+        cc <- g citations
+        bb <- g bibliography
+        -- bb <- g bibentries
+
         let (citationsSep, bibEntrySep, sectionSep) =
               case backend of
                 "odt"     -> ("\n\n"  , "\n\n", "\n\f\n")
-                otherwise -> ("////\n",     "", "====\n")
+                otherwise -> ("////\n",     "", "\n====\n")
             h sep = (T.intercalate (T.pack sep))
             zz =
-              (h citationsSep aa) <> (T.pack sectionSep) <> (h bibEntrySep bb)
+              (h citationsSep cc) <> (T.pack sectionSep) <> (h bibEntrySep bb)
         return zz
   x <-
     if backend == "native"
