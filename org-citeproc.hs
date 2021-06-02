@@ -283,10 +283,11 @@ chooseRendererNew backend =
   case backend of
     "ascii"         -> writePlain opts
     "html"          -> (writeHtml4String opts)
+    "json"          -> (writeJSON opts)
+    "native"        -> writeNative opts
+    "native-before" -> writeNative opts
     "odt"           -> (writeOpenDocument opts)
     "org"           -> (writeOrg opts) . nullifyDivAttr
-    "native-before" -> writeNative opts
-    "native"        -> writeNative opts
     otherwise       -> error $ "Unknown output format: " ++ backend
   where
     -- https://hackage.haskell.org/package/pandoc-2.14/docs/Text-Pandoc-Options.html#t:WriterOptions
@@ -319,6 +320,7 @@ main = do
         id $
         case optFormat opt of
           Just "ascii"         -> "ascii"
+          Just "json"          -> "json"
           Just "html"          -> "html"
           Just "odt"           -> "odt"
           Just "native-before" -> "native-before"
@@ -370,7 +372,7 @@ main = do
               (h citationsSep cc) <> (T.pack sectionSep) <> (h bibEntrySep bb)
         return zz
   x <-
-    if backend == "native"
+    if backend == "native" || backend == "json"
       then fNative doc
       else fNonNative doc
   TIO.putStrLn x
@@ -412,7 +414,7 @@ options =
       ["format"]
       (ReqArg
          (\format opt -> return opt {optFormat = Just format})
-         "ascii|html|native|native-before|odt|org")
+         "ascii|html|json|native|native-before|odt|org")
       "Output format"
   , Option
       ['h']
